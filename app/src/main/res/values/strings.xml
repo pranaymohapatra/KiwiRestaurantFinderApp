@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Kiwi</string>
+    <string name="api_key">258f3e496748d15cb792bc554000d6b6</string>
+    <string name="favorite">Favorite</string>
+    <string name="favoritrestaurants">Favorite Restaurants</string>
+    <string name="sortbyrating">Sort By Rating</string>
+    <string name="enter_your_dish_or_restaurant_name">Enter your dish or restaurant name...</string>
+    <string name="filters">Filters</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="restaurant_details">Restaurant Details</string>
+    <string name="sort_by_price">Sort By Price</string>
+    <string name="permission_rationale">Need Location Permission to Show Nearby Restaurants</string>
+    <string name="permission_denied_explanation">Please grant permission from Settings</string>
+    <string name="settings">Open Settings</string>
+
+
+    <string name="permissions_denied_alert">Permission Denied!!!!</string>
+    <string name="settings_1">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="start_typing">Start Typing...</string>
+</resources>
