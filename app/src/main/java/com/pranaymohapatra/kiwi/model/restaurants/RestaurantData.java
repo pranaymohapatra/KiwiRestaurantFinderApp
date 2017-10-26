@@ -10,22 +10,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import io.reactivex.Observable;
+
 
 public class RestaurantData {
 
-    static Map<String, List<RestaurantsItem>> restaurantsCuisine;
-    static ArrayList<Object> restaurantList = new ArrayList();
-    static String searchOrder = "Rating";
-    RatingComparator ratingComparator;
-    PriceComparator priceComparator;
+    private static Map<String, List<RestaurantsItem>> restaurantsCuisine;
+    private static ArrayList<Object> restaurantList = new ArrayList<>();
+    private static String searchOrder = "Rating";
+    private RatingComparator ratingComparator;
+    private PriceComparator priceComparator;
 
     public RestaurantData() {
+        Log.d("KIWIAPP", "Restaurant DAta Contructor");
         restaurantsCuisine = new TreeMap<>();
         ratingComparator = new RatingComparator();
         priceComparator = new PriceComparator();
     }
 
-    public void addRestaurantsByCuisine(String cuisine, RestaurantsItem restaurant) {
+    private void addRestaurantsByCuisine(String cuisine, RestaurantsItem restaurant) {
         List<RestaurantsItem> temp = restaurantsCuisine.get(cuisine);
         if (temp != null)
             temp.add(restaurant);
@@ -34,6 +37,17 @@ public class RestaurantData {
             temp.add(restaurant);
         }
         restaurantsCuisine.put(cuisine, temp);
+    }
+
+    public Observable<Integer> addRestaurantByCuisine(RestaurantModel model) {
+        Log.d("KIWIAPP", "addrestunrt by cuisne called");
+        List<RestaurantsItem> temp = model.getRestaurants();
+        for (RestaurantsItem item : temp) {
+            for (String cuisine : item.getRestaurant().getCuisines().split(",\\s", 0)) {
+                addRestaurantsByCuisine(cuisine, item);
+            }
+        }
+        return Observable.just(temp.size());
     }
 
     public void purge() {
@@ -51,7 +65,8 @@ public class RestaurantData {
         }
     }
 
-    public void makeCompositeList() {
+    public Observable<Integer> makeCompositeList() {
+        Log.d("KIWIAPP", "makeCompositeList");
         restaurantList.clear();
         Set<String> keySet = restaurantsCuisine.keySet();
         for (String key : keySet) {
@@ -61,21 +76,22 @@ public class RestaurantData {
                 restaurantList.add(item);
             }
         }
+        return Observable.just(restaurantList.size());
 
     }
 
     public void sortRestaurantsBy(String criteria) {
         searchOrder = criteria;
-        if(restaurantsCuisine.isEmpty())
+        if (restaurantsCuisine.isEmpty())
             return;
         Set<String> keySet = restaurantsCuisine.keySet();
-        if("Rating".equals(searchOrder)) {
+        if ("Rating".equals(searchOrder)) {
             for (String key : keySet) {
                 restaurantList.add(key);
                 List<RestaurantsItem> items = restaurantsCuisine.get(key);
                 Collections.sort(items, ratingComparator);
             }
-        } else if ("Price".equals(searchOrder)){
+        } else if ("Price".equals(searchOrder)) {
             for (String key : keySet) {
                 restaurantList.add(key);
                 List<RestaurantsItem> items = restaurantsCuisine.get(key);
